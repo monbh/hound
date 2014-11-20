@@ -3,7 +3,7 @@ FactoryGirl.define do
     repo
 
     trait :failed_build do
-      after(:create) do |repo|
+      after(:create) do
         build.violations << create(:violation)
       end
     end

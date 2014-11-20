@@ -8,7 +8,12 @@ describe StyleGuide::CoffeeScript do
           repo_config = double("RepoConfig", enabled_for?: true, for: {})
           style_guide = StyleGuide::CoffeeScript.new(repo_config)
           line = double("Line", content: "blah", number: 1, patch_position: 2)
-          file = double(:file, content: "1" * 81, filename: "test.coffee", line_at: line)
+          file = double(
+            :file,
+            content: "1" * 81,
+            filename: "test.coffee",
+            line_at: line
+          )
 
           violations = style_guide.violations_in_file(file)
           expect(violations.size).to eq 1
