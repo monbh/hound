@@ -2,7 +2,6 @@ require "spec_helper"
 
 describe Violation do
   it { should belong_to(:build) }
-  it { should delegate_method(:changed?).to(:line) }
   it { should serialize(:line) }
   it { should delegate_method(:patch_position).to(:line) }
 
@@ -27,6 +26,16 @@ describe Violation do
       messages = violation.messages
 
       expect(messages).to match_array([message])
+    end
+  end
+
+  describe "#on_changed_line?" do
+    it "should delegate to line" do
+      violation = build(:violation)
+
+      changed = violation.on_changed_line?
+
+      expect(changed).to eq violation.line.changed?
     end
   end
 end

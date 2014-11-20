@@ -4,7 +4,7 @@
 class Violation < ActiveRecord::Base
   belongs_to :build
 
-  delegate :changed?, :patch_position, to: :line
+  delegate :patch_position, to: :line
 
   serialize :line
 
@@ -17,6 +17,6 @@ class Violation < ActiveRecord::Base
   end
 
   def on_changed_line?
-    changed?
+    line.changed?
   end
 end
