@@ -12,4 +12,16 @@ namespace :repo do
     end
     puts 'Done scheduling jobs.'
   end
+
+  desc "Delete repos with no memberships"
+  task cleanup_orphans: :environment do
+    ActiveRecord::Base.connection.execute <<-SQL
+      DELETE FROM repos
+      WHERE id IN (
+        SELECT repos.id FROM repos
+        LEFT OUTER JOIN memberships on memberships.repo_id = repos.id
+        WHERE memberships.id IS NULL
+      )
+    SQL
+  end
 end
