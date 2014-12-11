@@ -11,8 +11,8 @@ describe "namespace repo" do
     it "removes repos without memberships" do
       repo = create(:repo)
       create(:membership, repo: repo)
-      create(:repo).tap do |repo|
-        repo.memberships.destroy_all
+      create(:repo).tap do |r|
+        r.memberships.destroy_all
       end
 
       task = Rake::Task["repo:remove_without_memberships"]
