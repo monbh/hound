@@ -7,27 +7,25 @@ describe "namespace repo" do
     Rake::Task.define_task(:environment)
   end
 
-  describe "task cleanup_orphans" do
-    before do
-      @repo1 = create :repo
-      create :membership, repo: @repo1
+  describe "task remove_without_memberships" do
+    it "removes repos without memberships" do
+      repo = create(:repo)
+      create(:membership, repo: repo)
+      create(:repo).tap do |repo|
+        repo.memberships.destroy_all
+      end
 
-      @repo2 = build(:repo).save
-      @repo3 = build(:repo).save
-
-      task = Rake::Task["repo:cleanup_orphans"]
+      task = Rake::Task["repo:remove_without_memberships"]
       task.reenable
       task.invoke
-    end
 
-    it "removes repos without memberships" do
-      expect(Repo.all).to eq([@repo1])
+      expect(Repo.all).to eq([repo])
     end
   end
 
-  describe "task cleanup_duplicate_github_ids" do
+  describe "task remove_duplicate_github_ids" do
     def run
-      task = Rake::Task["repo:cleanup_duplicate_github_ids"]
+      task = Rake::Task["repo:remove_duplicate_github_ids"]
       task.reenable
       task.invoke
     end
@@ -42,7 +40,7 @@ describe "namespace repo" do
 
     it "removes duplicate rows" do
       r1 = create(:repo)
-      r2 = build(:repo, github_id: r1.github_id).tap do |repo|
+      build(:repo, github_id: r1.github_id).tap do |repo|
         repo.save(validate: false)
       end
 
@@ -56,7 +54,7 @@ describe "namespace repo" do
       r2 = build(:repo, active: true, github_id: r1.github_id).tap do |repo|
         repo.save(validate: false)
       end
-      r3 = build(:repo, github_id: r1.github_id).tap do |repo|
+      build(:repo, github_id: r1.github_id).tap do |repo|
         repo.save(validate: false)
       end
 

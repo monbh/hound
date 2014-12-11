@@ -14,7 +14,7 @@ namespace :repo do
   end
 
   desc "Delete repos with no memberships"
-  task cleanup_orphans: :environment do
+  task remove_without_memberships: :environment do
     ActiveRecord::Base.connection.execute <<-SQL
       DELETE FROM repos
       WHERE id IN (
@@ -26,7 +26,7 @@ namespace :repo do
   end
 
   desc "Delete repos duplicate github_ids"
-  task cleanup_duplicate_github_ids: :environment do
+  task remove_duplicate_github_ids: :environment do
     ActiveRecord::Base.connection.execute <<-SQL
       WITH del AS (
         SELECT
