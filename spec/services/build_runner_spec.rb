@@ -69,7 +69,7 @@ describe BuildRunner, '#run' do
       expect(PullRequest).to have_received(:new).with(payload)
     end
 
-    it 'creates a pending GitHub status' do
+    it 'creates GitHub statuses' do
       repo = create(:repo, :active, github_id: 123)
       payload = stubbed_payload(
         github_repo_id: repo.github_id,
@@ -89,23 +89,6 @@ describe BuildRunner, '#run' do
         "headsha",
         "Hound is reviewing changes."
       )
-    end
-
-    it 'creates a success GitHub status' do
-      repo = create(:repo, :active, github_id: 123)
-      payload = stubbed_payload(
-        github_repo_id: repo.github_id,
-        full_repo_name: "test/repo",
-        head_sha: "headsha"
-      )
-      build_runner = BuildRunner.new(payload)
-      pull_request = stubbed_pull_request
-      stubbed_style_checker_with_violations
-      stubbed_commenter
-      github_api = stubbed_github_api
-
-      build_runner.run
-
       expect(github_api).to have_received(:create_success_status).with(
         "test/repo",
         "headsha",
