@@ -77,7 +77,7 @@ describe BuildRunner, '#run' do
         head_sha: "headsha"
       )
       build_runner = BuildRunner.new(payload)
-      pull_request = stubbed_pull_request
+      stubbed_pull_request
       stubbed_style_checker_with_violations
       stubbed_commenter
       github_api = stubbed_github_api
