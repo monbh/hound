@@ -69,7 +69,7 @@ describe BuildRunner, '#run' do
       expect(PullRequest).to have_received(:new).with(payload)
     end
 
-    it 'creates GitHub statuses' do
+    it "creates GitHub statuses" do
       repo = create(:repo, :active, github_id: 123)
       payload = stubbed_payload(
         github_repo_id: repo.github_id,
