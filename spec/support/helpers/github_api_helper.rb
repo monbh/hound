@@ -498,6 +498,22 @@ module GithubApiHelper
     )
   end
 
+  def stub_status_request(sha, state, description)
+    stub_request(
+      :post,
+      "https://api.github.com/statuses/#{sha}"
+    ).with(
+      headers: { "Authorization" => "token #{hound_token}" },
+      body: { "description" => description, "state" => state }
+    ).to_return(
+      status: 201,
+      body: File.read(
+        "spec/support/fixtures/github_status_response.json"
+      ),
+      headers: { "Content-Type" => "application/json; charset=utf-8" }
+    )
+  end
+
   private
 
   def hound_token

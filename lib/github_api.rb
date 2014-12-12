@@ -107,6 +107,10 @@ class GithubApi
     end
   end
 
+  def create_status(repo, sha, state, description)
+    client.create_status(repo, sha, state, description: description)
+  end
+
   private
 
   def add_user_to_org(username, repo)

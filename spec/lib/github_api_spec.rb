@@ -346,4 +346,15 @@ describe GithubApi do
       expect(user_teams).to eq teams
     end
   end
+
+  describe "#create_status" do
+    it "does something" do
+      api = GithubApi.new
+      request = stub_status_request('sha', 'pending', 'description')
+
+      api.create_status('repo', 'sha', 'pending', 'description')
+
+      expect(request).to have_been_requested
+    end
+  end
 end
