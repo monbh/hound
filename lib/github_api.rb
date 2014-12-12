@@ -107,8 +107,22 @@ class GithubApi
     end
   end
 
-  def create_status(repo, sha, state, description)
-    client.create_status(repo, sha, state, description: description)
+  def create_pending_status(full_repo_name, sha, description)
+    create_status(
+      repo: full_repo_name,
+      sha: sha,
+      state: "pending",
+      description: description
+    )
+  end
+
+  def create_success_status(full_repo_name, sha, description)
+    create_status(
+      repo: full_repo_name,
+      sha: sha,
+      state: "success",
+      description: description
+    )
   end
 
   private
@@ -201,5 +215,14 @@ class GithubApi
 
   def with_preview_client(&block)
     client.with_options(accept: PREVIEW_MEDIA_TYPE, &block)
+  end
+
+  def create_status(options)
+    client.create_status(
+      options.fetch(:repo),
+      options.fetch(:sha),
+      options.fetch(:state),
+      description: options.fetch(:description)
+    )
   end
 end

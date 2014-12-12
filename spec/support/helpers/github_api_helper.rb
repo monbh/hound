@@ -498,10 +498,10 @@ module GithubApiHelper
     )
   end
 
-  def stub_status_request(sha, state, description)
+  def stub_status_request(full_repo_name, sha, state, description)
     stub_request(
       :post,
-      "https://api.github.com/statuses/#{sha}"
+      "https://api.github.com/repos/#{full_repo_name}/statuses/#{sha}"
     ).with(
       headers: { "Authorization" => "token #{hound_token}" },
       body: { "description" => description, "state" => state }

@@ -347,12 +347,23 @@ describe GithubApi do
     end
   end
 
-  describe "#create_status" do
-    it "does something" do
+  describe "#create_pending_status" do
+    it "makes request to GitHub for creating a pending status" do
       api = GithubApi.new
-      request = stub_status_request('sha', 'pending', 'description')
+      request = stub_status_request("test/repo", "sha", "pending", "description")
 
-      api.create_status('repo', 'sha', 'pending', 'description')
+      api.create_pending_status("test/repo", "sha", "description")
+
+      expect(request).to have_been_requested
+    end
+  end
+
+  describe "#create_success_status" do
+    it "makes request to GitHub for creating a success status" do
+      api = GithubApi.new
+      request = stub_status_request("test/repo", "sha", "success", "description")
+
+      api.create_success_status("test/repo", "sha", "description")
 
       expect(request).to have_been_requested
     end
