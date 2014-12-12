@@ -31,7 +31,7 @@ describe "namespace repo" do
     end
 
     it "does not effect unduplicated rows" do
-      repo = create :repo
+      repo = create(:repo)
 
       run
 
@@ -39,10 +39,10 @@ describe "namespace repo" do
     end
 
     it "removes duplicate rows" do
-      r1 = create(:repo)
-      build(:repo, github_id: r1.github_id).tap do |repo|
-        repo.save(validate: false)
-      end
+      repo1 = create(:repo)
+      repo2 = create(:repo)
+
+      repo2.update_attribute :github_id, repo1.github_id
 
       run
 
@@ -50,17 +50,16 @@ describe "namespace repo" do
     end
 
     it "prefers active repos to inactive repos" do
-      r1 = create(:repo)
-      r2 = build(:repo, active: true, github_id: r1.github_id).tap do |repo|
-        repo.save(validate: false)
-      end
-      build(:repo, github_id: r1.github_id).tap do |repo|
-        repo.save(validate: false)
-      end
+      repo1 = create(:repo)
+      repo2 = create(:repo, active: true)
+      repo3 = create(:repo)
+
+      repo2.update_attribute :github_id, repo1.github_id
+      repo3.update_attribute :github_id, repo1.github_id
 
       run
 
-      expect(Repo.all).to eq([r2])
+      expect(Repo.all).to eq([repo2])
     end
   end
 end
