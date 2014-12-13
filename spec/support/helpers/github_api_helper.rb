@@ -498,6 +498,21 @@ module GithubApiHelper
     )
   end
 
+  def stub_status_requests(repo_name, sha)
+    stub_status_request(
+      repo_name,
+      sha,
+      "pending",
+      "Hound is reviewing changes."
+    )
+    stub_status_request(
+      repo_name,
+      sha,
+      "success",
+      "Hound is done reviewing changes."
+    )
+  end
+
   def stub_status_request(full_repo_name, sha, state, description)
     stub_request(
       :post,
